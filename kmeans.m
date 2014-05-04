@@ -10,9 +10,9 @@ function [ indices, centroids ] = kmeans( data, k_, max_iters)
 n = size(data,1);
 d = size(data,2);
 
-% We'll choose the random centroids by first finding the maximum size
-% along all dimensions and use that to create our hypercube from which
-% we will draw our random centroids
+% We'll choose the random centroids by first finding the min / max sizes
+% along all dimensions and draw our random centroids from a hypercube
+% constructed from that min/max.
 max = -Inf;
 min = Inf;
 for i = 1:n
@@ -30,6 +30,9 @@ end
 max_clusters = -Inf;
 retry = 1;
 iters = 0;
+
+% We'll keep retrying kmeans until at least one point belongs to every
+% centroid or we reach the maximum number of iterations
 while (retry && iters < max_iters)
     iters = iters + 1;
     retry = 0;
@@ -81,25 +84,28 @@ while (retry && iters < max_iters)
             indices = new_indices;
         end
 
+        % We keep track of how many centroids have points in order to 
+        % decide whether we want to retry or not. We save the best 
+        % centroids / indices when the number of clusters we use is the 
+        % highest.
         used_clusters = zeros(k_,1);
         for i = 1:n
             used_clusters(indices(i)) = 1;
         end
-        
-        num_clusters = sum(used_clusters);
-        if (num_clusters > max_clusters)
-            max_clusters = num_clusters;
+        num_used_clusters = sum(used_clusters);
+        if (num_used_clusters > max_clusters)
+            max_clusters = num_used_clusters;
             best_indices = indices;
             best_centroids = centroids;
         end
             
         
-        if (num_clusters < k)
+        if (num_used_clusters < k)
             retry = 1;
         end
     end
     
-    disp(strcat('num clusters: ', num2str(num_clusters)))
+    disp(strcat('num clusters: ', num2str(num_used_clusters)))
 end
 
 disp(strcat('best num clusters: ', num2str(max_clusters)))
