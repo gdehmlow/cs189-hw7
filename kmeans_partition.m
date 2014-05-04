@@ -1,7 +1,7 @@
 function [ indices ] = kmeans_partition( data, centroids )
 % Partition the data by assigning each point to the nearest centroid
 % Inputs -
-%   data: n x d matrix - n points each consisting of d values
+%   data: n x d matrix - n points with dimension d
 %   centroids: cell array (size k) of centroids with dimension d
 % Outputs -
 %   indices: array (size n) containing which cluster 1 < i < k each data
