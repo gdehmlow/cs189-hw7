@@ -98,8 +98,7 @@ while (retry && iters < max_iters)
             best_indices = indices;
             best_centroids = centroids;
         end
-            
-        
+
         if (num_used_clusters < k)
             retry = 1;
         end
