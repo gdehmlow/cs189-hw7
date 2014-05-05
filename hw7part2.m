@@ -12,10 +12,11 @@ n = size(imcell,2);
 
 % Transform images to grayscale vectors and mask them
 mask = mask(:,:,1);
-unmasked_pixels = find(mask)';
-images = zeros(n, size(unmasked_pixels,2));
+unmasked_pixels = find(mask);
+images = zeros(n, size(unmasked_pixels,1));
 for i = 1:n
-    image = reshape(rgb2gray(imcell{i})', 1, w*h);
+    %image = reshape(rgb2gray(imcell{i})', 1, w*h);
+    image = rgb2gray(imcell{i});
     %full_im = zeros(size(mask));
     im_vector = image(unmasked_pixels);
     size(im_vector);
@@ -23,8 +24,19 @@ for i = 1:n
     images(i,:) = im_vector;
 end
 
-% Since we're doing rgb, just use one channel of the mask as the mask
-efs = eigenfaces(images, 10);
+efs = mapminmax(eigenfaces(images, 10), 0, 255);
+
+disp('10 Celebrity Eigenfaces');
+full_im = zeros(size(mask));
+figure;
+for i = 1:10
+    full_im(unmasked_pixels) = efs(i,:);
+    subplot(2, 5, i), imshow(full_im, []);
+    title(num2str(i));
+end
+set(gcf, 'PaperUnits', 'centimeters');
+set(gcf, 'PaperPosition', [0, 0, 30, 20]);
+saveas(gcf, '10celebeigenfaces', 'jpg');
 
 %unmasked_pixels = find(mask);
 
