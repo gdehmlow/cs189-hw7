@@ -1,10 +1,9 @@
-function [ recon_face ] = reconstruct( face, mean_face, efs, S, p )
+function [ recon_face ] = reconstruct( face, mean_face, efs, p )
 % Reconstruct the given face from k top eigenfaces
 % Input -
 %   face: 1 x k array - masked face
-%   mean: 1 x k array - mean face
+%   mean_face: 1 x k array - mean face
 %   efs: n x k matrix - n eigenfaces
-%   S: n x k matrix - singular matrix from svd
 %   p: number of eigenfaces to use to reconstruct the face
 % Output -
 %   recon_face: 1 x k array - reconstructed face
